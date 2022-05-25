@@ -10,7 +10,10 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     private float movementX;
     private float movementY;
-    public int speed;
+    public float speed;
+    public int rotSpeed;
+
+    public float maxSpeed;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +31,13 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(movementX, movementY) * speed;
+        //Rota el objeto con los controles de X. (A, D)
+        rb.rotation -= movementX * rotSpeed;
+        //Acelera dependiendo de los controles en Y (W, S), con una velocidad minima y maxima.
+        speed = Mathf.Clamp(speed + movementY, 1.5f, maxSpeed);
+
+        //Le asigna esa velocidad en direccion del eje Y del objeto.
+        rb.velocity = transform.up * speed;
     }
 }
 
