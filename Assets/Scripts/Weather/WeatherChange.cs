@@ -7,9 +7,51 @@ using LitJson;
 public class WeatherChange : MonoBehaviour
 {
     private int actualWeather;
+    [SerializeField] DigitalRuby.RainMaker.RainScript2D rainMaker;
+
     private void Start()
     {
         StartCoroutine(GetWeather());    
+    }
+
+    private void WeatherChanger()
+    {
+        rainMaker.gameObject.SetActive(true);
+        if (actualWeather >= 200 && actualWeather < 300)
+        {
+            //tormenta
+            rainMaker.RainIntensity+=1;
+        }
+        else if(actualWeather >= 300 && actualWeather < 400)
+        {
+            //llovizna
+            rainMaker.RainIntensity += 0.2f;
+        }
+        else if(actualWeather >= 400 && actualWeather < 500)
+        {
+            //lluvia
+            rainMaker.RainIntensity += 0.55f;
+        }
+        else if (actualWeather >= 500 && actualWeather < 600)
+        {
+            //lluvia
+            rainMaker.RainIntensity += 0.7f;
+        }
+        else if (actualWeather >= 700 && actualWeather < 800)
+        {
+            //niebla
+            rainMaker.RainIntensity += 0.1f;
+        }
+        else if (actualWeather == 800)
+        {
+            //despejado
+            rainMaker.gameObject.SetActive(false);
+        }
+        else if (actualWeather > 800)
+        {
+            //Nubes
+            rainMaker.RainIntensity += 0.1f;
+        }
     }
 
     IEnumerator GetWeather()
@@ -20,15 +62,16 @@ public class WeatherChange : MonoBehaviour
         if(www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError(www.error);
+            actualWeather = 800;
         }
         else
         {
-            Debug.Log(www.downloadHandler.text);
             JsonData jsonData = JsonMapper.ToObject(www.downloadHandler.text);
             actualWeather = (int)jsonData["weather"][0]["id"];
-
-            Debug.Log(actualWeather);
         }
+
+        WeatherChanger();
+        StopCoroutine(GetWeather());
 
     }
 }
