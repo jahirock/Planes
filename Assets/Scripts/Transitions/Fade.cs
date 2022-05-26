@@ -20,7 +20,7 @@ public class Fade : MonoBehaviour
     public void FadeIn()
     {
         //Cambia el alfa a 100% en 2 segundos
-        spriteRenderer.DOFade(1, 2);
+        spriteRenderer.DOFade(1, 2).OnStart(()=> { Debug.Log("Inicia fade in"); });
     }
 
     [ContextMenu("FadeOut")]
@@ -43,6 +43,8 @@ public class Fade : MonoBehaviour
         {
             FadeIn();
         }
+
+        GameManager.OnPlayerDeath += FadeIn;
     }
 
     private void StartGame()

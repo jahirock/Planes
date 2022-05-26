@@ -29,6 +29,15 @@ public class PlayerController : MonoBehaviour
         movementY = movementVector.y;
     }
 
+    private void OnFire()
+    {
+        SoundManager.instace.PlayShoot();
+        GameObject go = ObjectPooler.instance.GetPoolObject("Bullet");
+        go.transform.position = transform.position;
+        go.transform.rotation = transform.rotation;
+        go.SetActive(true);
+    }
+
     private void FixedUpdate()
     {
         //Rota el objeto con los controles de X. (A, D)
